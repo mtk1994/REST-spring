@@ -9,3 +9,5 @@ Version of the used libraries/software:
 
 Template of the project created using:
 https://start.spring.io/
+
+You can find Postman collection of example rest requests that can be used to test the application in the external_resources/postman directory.
