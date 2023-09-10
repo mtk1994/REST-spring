@@ -71,10 +71,11 @@ public class StudentController {
      * }
      *
      * @param student student to create. Take this object directly from the HTTP POST request body.
+     * @return Data of the created student.
      */
     @PostMapping
-    public void createStudent(@RequestBody Student student) {
-        studentService.addNewStudent(student);
+    public Student createStudent(@RequestBody Student student) {
+        return studentService.addNewStudent(student);
     }
 
     /**
@@ -82,22 +83,24 @@ public class StudentController {
      * example usage: http://localhost:8080/api/v1/student/1
      *
      * @param studentId The ID of the student to be deleted.
+     * @return Data of the deleted student.
      */
     @DeleteMapping(path = "{studentId}")
-    public void deleteStudentById(@PathVariable("studentId") Long studentId) {
-        studentService.deleteStudent(studentId);
+    public Student deleteStudentById(@PathVariable("studentId") Long studentId) {
+        return studentService.deleteStudent(studentId);
     }
 
     /**
      * Update student's data.
-     * example usage: http://localhost:8080/api/v1/student/1?name=JOHNY?email=johny@gmail.com
+     * example usage: http://localhost:8080/api/v1/student/1?name=JOHNY&email=johny@gmail.com
      *
      * @param studentId Student ID to identify him.
      * @param name      New student name.
      * @param email     New student email address.
+     * @return Data of the updated student.
      */
     @PutMapping(path = "{studentId}")
-    public void updateStudent(@PathVariable("studentId") Long studentId, @RequestParam(required = false) String name, @RequestParam(required = false) String email) {
-        studentService.updateStudent(studentId, name, email);
+    public Student updateStudent(@PathVariable("studentId") Long studentId, @RequestParam(required = false) String name, @RequestParam(required = false) String email) {
+        return studentService.updateStudent(studentId, name, email);
     }
 }

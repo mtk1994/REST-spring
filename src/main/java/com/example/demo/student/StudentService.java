@@ -42,24 +42,29 @@ public class StudentService {
      * Create a new student with given data.
      *
      * @param student student to create. Take this object directly from the HTTP POST request body.
+     * @return Data of the created student.
      */
-    public void addNewStudent (Student student) {
+    public Student addNewStudent (Student student) {
         // check if email is already in use
         checkIfEmailTaken (student.getEmail());
-        studentRepository.save(student);
+        return studentRepository.save(student);
     }
 
     /**
      * Delete student by its ID.
      *
      * @param studentId The ID of the student to be deleted.
+     * @return Data of deleted student.
      */
-    public void deleteStudent (Long studentId) {
-        boolean exists = studentRepository.existsById (studentId);
-        if (!exists)
+    public Student deleteStudent (Long studentId) {
+        Optional<Student> student = studentRepository.findStudentById(studentId);
+
+        if (student.isEmpty())
             throw new IllegalStateException("Student with id: " + studentId + " does not exists");
 
         studentRepository.deleteById (studentId);
+
+        return student.get();
     }
 
     /**
@@ -68,9 +73,10 @@ public class StudentService {
      * @param studentId Student ID to identify him.
      * @param name New student name.
      * @param email New student email address.
+     * @return Data of the updated student.
      */
     @Transactional
-    public void updateStudent (Long studentId, String name, String email){
+    public Student updateStudent (Long studentId, String name, String email){
         Optional<Student> studentOptional = studentRepository.findById (studentId);
         if (studentOptional.isEmpty())
             throw new IllegalStateException("Student with id: " + studentId + " does not exists");
@@ -78,15 +84,17 @@ public class StudentService {
         Student student = studentOptional.get();
 
         //check name
-        if (name != null && name.length() > 0 && !Objects.equals (student.getName(), name))
+        if (name != null && !name.isEmpty() && !Objects.equals (student.getName(), name))
             student.setName (name);
 
         //check email
-        if (email != null && email.length() > 0 && !Objects.equals (student.getEmail(), email)) {
+        if (email != null && !email.isEmpty() && !Objects.equals (student.getEmail(), email)) {
             // check if email is already in use
-            checkIfEmailTaken (student.getEmail());
+            checkIfEmailTaken (email);
             student.setEmail (email);
         }
+
+        return student;
     }
 
     // Utils

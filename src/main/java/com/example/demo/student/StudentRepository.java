@@ -13,4 +13,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     // TODO it looks like the whole logic is automatically generated
     Optional<Student> findStudentByEmail (String email);
 
+    // it is equivalent to sql query: SELECT * FROM student WHERE id = ?;
+    Optional<Student> findStudentById (Long id);
+
 }
